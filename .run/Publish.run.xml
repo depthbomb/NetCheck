@@ -1,0 +1,7 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish" type="CompoundRunConfigurationType">
+    <toRun name="Publish NetCheck" type="DotNetFolderPublish" />
+    <toRun name="Publish NetCheck.Worker" type="DotNetFolderPublish" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheck", "NetCheck\NetCheck.csproj", "{0F8D84D3-2D4C-4BDD-9738-5620B8E8DA28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheck.Worker", "NetCheck.Worker\NetCheck.Worker.csproj", "{7FD04096-1C39-4F71-9055-90C132CFF41F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F8D84D3-2D4C-4BDD-9738-5620B8E8DA28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F8D84D3-2D4C-4BDD-9738-5620B8E8DA28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F8D84D3-2D4C-4BDD-9738-5620B8E8DA28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F8D84D3-2D4C-4BDD-9738-5620B8E8DA28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
