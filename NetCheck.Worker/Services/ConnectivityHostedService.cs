@@ -109,7 +109,7 @@ public class ConnectivityHostedService : IHostedService
                 await _hub.Clients.All.SendAsync("NotifyOffline", _cts.Token);
             }
 
-            await Task.Delay(500, _cts.Token);
+            await Task.Delay(750, _cts.Token);
         }
     }
 
