@@ -1,21 +1,11 @@
 /* eslint-env node */
 const colors = require('tailwindcss/colors');
 const plugin = require('tailwindcss/plugin');
-const { default: flattenColorPalette } = require('tailwindcss/lib/util/flattenColorPalette');
 
 module.exports = {
 	content: [
 		'./index.html',
 		'./src/**/*.{vue,js,ts,jsx,tsx}',
-	],
-	plugins: [
-		function ({ matchUtilities, theme }) {
-			matchUtilities({
-					highlight: (value) => ({ boxShadow: `inset 0 1px 0 0 ${value}` }),
-				},
-				{ values: flattenColorPalette(theme('backgroundColor')), type: 'color' }
-			);
-		}
 	],
 	theme: {
 		extend: {
@@ -42,6 +32,19 @@ module.exports = {
 				zinc: colors.zinc,
 				neutral: colors.neutral,
 				stone: colors.stone,
+			},
+			fontFamily: {
+				mono: [
+					'"Cascadia Code"',
+					'ui-monospace',
+					'SFMono-Regular',
+					'Menlo',
+					'Monaco',
+					'Consolas',
+					'"Liberation Mono"',
+					'"Courier New"',
+					'monospace'
+				]
 			},
 			transitionProperty: {
 				'button': 'color, background-color, box-shadow, opacity',
