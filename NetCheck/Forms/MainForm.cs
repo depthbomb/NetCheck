@@ -1,5 +1,4 @@
 using Microsoft.Win32;
-using NetCheck.Managers;
 using System.ComponentModel;
 using Microsoft.Web.WebView2.Core;
 

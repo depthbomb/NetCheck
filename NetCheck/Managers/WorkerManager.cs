@@ -1,7 +1,4 @@
-﻿using System.Reflection;
-using System.Diagnostics;
-
-namespace NetCheck.Managers;
+﻿namespace NetCheck.Managers;
 
 public static class WorkerManager
 {
