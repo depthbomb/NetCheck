@@ -1,6 +1,6 @@
 #define MyAppName "NetCheck"
 #define MyAppDescription "A simple internet connectivity monitoring application"
-#define MyAppVersion "2.0.0.0"
+#define MyAppVersion "2.0.2.0"
 #define MyAppPublisher "Caprine Logic"
 #define MyAppExeName "netcheck.exe"
 #define MyAppCopyright "Copyright (C) 2024 Caprine Logic"

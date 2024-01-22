@@ -9,6 +9,8 @@
         <AssemblyName>netcheck</AssemblyName>
         <LangVersion>latestmajor</LangVersion>
         <ApplicationIcon>Resources\Icons\Icon.ico</ApplicationIcon>
+        <AssemblyVersion>2.0.2.0</AssemblyVersion>
+        <FileVersion>2.0.2.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
