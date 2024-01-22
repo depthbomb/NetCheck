@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { exec } from 'node:child_process';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 
 const outDir = resolve(__dirname, '..', 'NetCheck.Worker', 'static');
 
@@ -24,12 +25,6 @@ export default defineConfig({
 	},
 	plugins: [
 		vue(),
-		{
-			name: 'create-zip',
-			enforce: 'post',
-			transform() {
-				exec(`zip -r ./ui.zip ${outDir}`)
-			}
-		}
+		viteSingleFile()
 	],
 });

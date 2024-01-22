@@ -11,10 +11,10 @@ Compared to the original project, this version includes an average latency displ
 
 ### Architecture
 
-NetCheck has two processes: the "client" and "worker". The client is a simple WinForms application with a WebView2 control. The worker is a simple ASP.NET Core server that does the actual work by probing servers and recording ping.
+NetCheck has two processes: the "client" and "worker". The client is a simple WinForms application with a WebView2 control. The worker is a simple ASP.NET Core server that does the actual work by probing servers and recording latency.
 
 When the client is started, it starts the worker and waits for the worker to respond to pings before continuing its initilization.
 
 IPC between the client and worker is achieved through a combination of HTTP requests and real-time SignalR messaging.
 
-This architecture was chosen over something like Electron because, while lacking many features of Electron, applcations using WebView2 are generally faster and far more lightweight as long as you have the installed runtimes and are on a relatively recent version of Windows 10 or Windows 11.
+This architecture was chosen over something like Electron because, while lacking many features of Electron, applications using WebView2 are generally faster and far more lightweight as long as you have the installed runtimes and are on a relatively recent version of Windows 10 or Windows 11.
