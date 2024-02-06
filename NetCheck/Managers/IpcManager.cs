@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using NetCheck.Shared;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace NetCheck.Managers;
 
-public static class BackendManager
+public static class IpcManager
 {
     public static void Initialize()
     {
-        var port = PortManager.Port;
-        var hub  = new HubConnectionBuilder().WithUrl($"http://localhost:{port}/connection").Build();
+        var hub = new HubConnectionBuilder().WithUrl($"http://localhost:{Constants.WorkerPort}/connection").Build();
 
         hub.On<bool>("Online", OnOnlineStatus);
         hub.StartAsync().Wait();

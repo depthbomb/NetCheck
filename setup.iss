@@ -1,6 +1,6 @@
 #define MyAppName "NetCheck"
 #define MyAppDescription "A simple internet connectivity monitoring application"
-#define MyAppVersion "2.0.2.0"
+#define MyAppVersion "2.1.0.0"
 #define MyAppPublisher "Caprine Logic"
 #define MyAppExeName "netcheck.exe"
 #define MyAppCopyright "Copyright (C) 2024 Caprine Logic"
@@ -14,10 +14,10 @@ AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppCopyright={#MyAppCopyright}
 VersionInfoVersion={#MyAppVersion}
-DefaultDirName={autopf}\{#MyAppPublisher}\{#MyAppName}
+DefaultDirName={autoappdata}\{#MyAppPublisher}\{#MyAppName}
 DisableDirPage=yes
 DisableProgramGroupPage=yes
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
 AllowNoIcons=yes
 OutputDir=.\dist
 OutputBaseFilename=netcheck_setup
@@ -59,6 +59,7 @@ Name: startup; Description: "Run on Startup"
 [Files]
 Source: ".\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\publish\netcheck.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\publish\NetCheck.Shared.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\publish\netcheck_worker.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\publish\netcheck_worker.pdb"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\publish\WebView2Loader.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -72,8 +73,14 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#MyAppName}"; ValueData: "{app}\{#MyAppExeName}"; Tasks: startup; Flags: uninsdeletevalue
 
 [Run]
+Filename: "{sys}\sc.exe"; Parameters: "create NetCheck.Worker start= auto binPath= ""{app}\netcheck_worker.exe"" DisplayName= ""NetCheck Worker Service"""; StatusMsg: "Installing worker service..."; Flags: runhidden waituntilterminated
+Filename: "{sys}\sc.exe"; Parameters: "start NetCheck.Worker"; StatusMsg: "Starting worker service..."; Flags: runhidden waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent; Check: FromUpdate
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent unchecked; Check: FromNormal
+
+[UninstallRun]
+Filename: "{sys}\sc.exe"; Parameters: "stop NetCheck.Worker"; Flags: runhidden waituntilterminated
+Filename: "{sys}\sc.exe"; Parameters: "delete NetCheck.Worker"; Flags: runhidden waituntilterminated
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"

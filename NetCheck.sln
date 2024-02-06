@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheck", "NetCheck\NetChe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheck.Worker", "NetCheck.Worker\NetCheck.Worker.csproj", "{7FD04096-1C39-4F71-9055-90C132CFF41F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCheck.Shared", "NetCheck.Shared\NetCheck.Shared.csproj", "{21DFB555-59CF-489E-9967-5EC5C10BA945}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD04096-1C39-4F71-9055-90C132CFF41F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21DFB555-59CF-489E-9967-5EC5C10BA945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21DFB555-59CF-489E-9967-5EC5C10BA945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21DFB555-59CF-489E-9967-5EC5C10BA945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21DFB555-59CF-489E-9967-5EC5C10BA945}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

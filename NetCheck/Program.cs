@@ -2,42 +2,57 @@ namespace NetCheck;
 
 internal static class Program
 {
-    /// <summary>
-    ///     The main entry point for the application.
-    /// </summary>
     [STAThread]
-    private static void Main()
+    private static int Main()
     {
-        using (new Mutex(true, "NetCheckMutex", out bool createdNew))
+        if (!ServiceManager.ServiceExists())
         {
+            MessageBox.Show("The NetCheck Worker Service could not be found on this system. Please re-install NetCheck.", "Missing Service", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            return 1;
+        }
+
+        if (!ServiceManager.IsServiceRunning())
+        {
+            MessageBox.Show("The NetCheck Worker Service is not running. Start the service manually or re-install NetCheck.", "Service Not Running", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            
+            return 1;
+        }
+
+        return InitializeClient();
+    }
+
+    private static int InitializeClient()
+    {
+        using (new Mutex(true, "NetCheckMutex", out _))
+        {
+            ApplicationConfiguration.Initialize();
+
             try
             {
-                if (!createdNew)
-                {
-                    Console.WriteLine("Instance is already running");
-                    return;
-                }
-                
-                ApplicationConfiguration.Initialize();
-                WorkerManager.Initialize();
-                if (WorkerManager.IsWorkerRespondingAsync().Result)
+                if (ServiceManager.IsServiceRespondingAsync().Result)
                 {
                     WebViewManager.Initialize();
                     TrayManager.Initialize();
-                    BackendManager.Initialize();
+                    IpcManager.Initialize();
                     MainFormManager.Initialize();
                     Application.Run();
                 }
                 else
                 {
                     MessageBox.Show("Failed to ping worker after multiple attempts.", "Initialization Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Application.Exit();
+
+                    return 1;
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.ToString());
+
+                return 1;
             }
+            
+            return 0;
         }
     }
 }

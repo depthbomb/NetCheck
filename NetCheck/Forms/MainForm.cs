@@ -1,3 +1,4 @@
+using NetCheck.Shared;
 using Microsoft.Win32;
 using System.ComponentModel;
 using Microsoft.Web.WebView2.Core;
@@ -36,7 +37,7 @@ public partial class MainForm : Form
             _webView2.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             #endif
             
-            _webView2.CoreWebView2.Navigate($"http://localhost:{PortManager.Port}");
+            _webView2.CoreWebView2.Navigate($"http://localhost:{Constants.WorkerPort}");
         }
         catch (Exception ex)
         {

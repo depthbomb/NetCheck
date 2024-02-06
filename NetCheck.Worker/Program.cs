@@ -1,3 +1,4 @@
+using NetCheck.Shared;
 using System.Reflection;
 using NetCheck.Worker.Hubs;
 using NetCheck.Worker.Services;
@@ -7,29 +8,14 @@ namespace NetCheck.Worker;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
-        if (args.Length == 0)
-        {
-            Console.WriteLine("Expected at least 1 argument");
-            Environment.Exit(1);
-        }
-        
-        var serverPort   = int.Parse(args[0]);
-        var appDirectory = args[1];
-        if (!Directory.Exists(appDirectory))
-        {
-            Console.WriteLine($"App directory \"{appDirectory}\" does not exist");
-            Environment.Exit(1);
-        }
-        
-        
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
             #if DEBUG
             WebRootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "..", "..", "..", "static")
             #else
-            WebRootPath = Path.Combine(appDirectory, "static")
+            WebRootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "static")
             #endif
         });
 
@@ -41,10 +27,10 @@ public static class Program
             client.Timeout = TimeSpan.FromSeconds(3);
             client.DefaultRequestHeaders.Add(HeaderNames.UserAgent, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
         });
+        builder.Services.AddWindowsService();
         builder.Services.AddSingleton<PingService>();
         builder.Services.AddSingleton<NetworkService>();
         builder.Services.AddHostedService<ConnectivityHostedService>();
-        builder.Services.AddHostedService<ClientHeartbeatHostedService>();
         builder.Services.AddControllers();
 
         var app = builder.Build();
@@ -53,6 +39,6 @@ public static class Program
         app.MapControllers();
         app.MapFallbackToFile("index.html");
         app.MapHub<ConnectionHub>("/connection");
-        app.Run($"http://localhost:{serverPort}");
+        app.Run($"http://localhost:{Constants.WorkerPort}");
     }
 }
