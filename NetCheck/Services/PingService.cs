@@ -1,19 +1,16 @@
-﻿namespace NetCheck.Worker.Services;
+﻿namespace NetCheck.Services;
 
-public class PingService : IDisposable
+public class PingService
 {
-    private const    int           MaxPastPings  = 100;
+    private double _lastPing = double.MaxValue;
+
+    private const int MaxPastPings = 50;
+    
     private readonly IList<double> _averagePings = [];
 
-    public void Dispose()
-    {
-        _averagePings.Clear();
-    }
+    public IDisposable CreateMeasurer() => new PingMeasurer(this);
 
-    public IDisposable CreateMeasurer()
-    {
-        return new PingMeasurer(this);
-    }
+    public double GetLastPing() => _lastPing;
 
     public double GetAveragePing()
     {
@@ -47,6 +44,7 @@ public class PingService : IDisposable
         
         public void Dispose()
         {
+            _ping._lastPing = (DateTime.UtcNow - _now).TotalMilliseconds;
             _ping.AddAveragePing((DateTime.UtcNow - _now).TotalMilliseconds);
         }
     }

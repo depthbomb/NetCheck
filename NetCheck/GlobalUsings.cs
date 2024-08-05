@@ -1,5 +1,4 @@
-﻿global using System;
-global using System.Net;
-global using NetCheck.Managers;
-global using System.Reflection;
-global using System.Diagnostics;
+﻿global using NetCheck.Events;
+global using NetCheck.Extensions;
+global using NetCheck.Services;
+global using System;

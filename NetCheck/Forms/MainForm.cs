@@ -1,7 +1,5 @@
-using NetCheck.Shared;
-using Microsoft.Win32;
+using NetCheck.Controls;
 using System.ComponentModel;
-using Microsoft.Web.WebView2.Core;
 
 namespace NetCheck.Forms;
 
@@ -9,68 +7,37 @@ public partial class MainForm : Form
 {
     public bool ShouldClose = false;
 
-    public MainForm()
+    private readonly ProbeService   _probe;
+    private readonly NetworkService _network;
+
+    public MainForm(StatusBanner statusBanner, ProbeService probe, NetworkService network)
     {
         Visible = false;
         Icon    = Resources.Icons.Icon;
 
+        _probe              =  probe;
+        _network            =  network;
+        _probe.ProbeResults += ProbeOnProbeResults;
+
         InitializeComponent();
+        this.RespectDarkMode();
+        SubscribeToHelpEvents();
+        
+        c_MainTableLayout.Controls.Add(statusBanner, 0, 0);
 
-        HandleCreated += OnHandleCreated;
-
-        #pragma warning disable CS4014
-        InitializeWebViewAsync();
-        #pragma warning restore CS4014
+        c_ProbeLogListView.Columns.Add("URL", -2);
+        c_ProbeLogListView.Columns.Add("Latency");
     }
 
-    private async Task InitializeWebViewAsync()
+    private void SubscribeToHelpEvents()
     {
-        try
-        {
-            await _webView2.EnsureCoreWebView2Async(
-                await CoreWebView2Environment.CreateAsync()
-            );
-            
-            #if RELEASE
-            _webView2.CoreWebView2.Settings.AreDevToolsEnabled            = false;
-            _webView2.CoreWebView2.Settings.IsStatusBarEnabled            = false;
-            _webView2.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            #endif
-            
-            _webView2.CoreWebView2.Navigate($"http://localhost:{Constants.WorkerPort}");
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Failed to initialize CoreWebView2: {ex.Message}", "WebView Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Application.Exit();
-        }
-    }
-
-    private static bool IsSystemUsingDarkMode()
-    {
-        try
-        {
-            var res = (int)(Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", -1) ?? 0);
-
-            return res == 0;
-        }
-        catch
-        {
-            return false;
-        }
+        c_LastPingValueLabel.HelpRequested    += (_, _) => this.ShowHelpMessageBox("Last Ping", "This displays the time it took between the last request and its response.\nWhile the URLs that are probed are typically low-latency with a very high uptime, there are various factors that could result in the reported ping being inaccurate. Unless it is very high, take this value with a grain of salt.");
+        c_AveragePingValueLabel.HelpRequested += (_, _) => this.ShowHelpMessageBox("Average Ping", "This displays the average of the last 50 pings.\nThis value will not be accurate if the application has just been started because it has not recorded enough pings.");
+        c_NetworkTypeValueLabel.HelpRequested += (_, _) => this.ShowHelpMessageBox("Network Interface", "This displays whether you are on an Ethernet or Wi-Fi connection.");
+        c_ProbeLogListView.HelpRequested      += (_, _) => this.ShowHelpMessageBox("Log", "This displays a log the last 50 probe attempts including the URL that was probed and the response time.");
     }
     
     #region Event Handlers
-    private void OnHandleCreated(object? sender, EventArgs e)
-    {
-        if (IsSystemUsingDarkMode())
-        {
-            NativeMethods.SetPreferredAppMode(2);
-            NativeMethods.UseImmersiveDarkMode(Handle, true);
-            NativeMethods.FlushMenuThemes();
-        }
-    }
-
     private void OnClosing(object? sender, CancelEventArgs e)
     {
         if (!ShouldClose)
@@ -78,10 +45,45 @@ public partial class MainForm : Form
             Hide();
             e.Cancel = true;
         }
-        else
+    }
+
+    private void ProbeOnProbeResults(object? sender, ProbeResultEventArgs e)
+    {
+        var lastPing = Math.Round(e.LastLatency);
+        var avgPing  = Math.Round(e.AverageLatency);
+
+        var lastPingLabelForeColor = lastPing >= 175 ? GlobalShared.OfflineColor : lastPing >= 100 ? GlobalShared.DegradedColor : Color.Black;
+        var avgPingLabelForeColor  = avgPing  >= 175 ? GlobalShared.OfflineColor : avgPing  >= 100 ? GlobalShared.DegradedColor : Color.Black;
+        
+        var lastPingForeColor = lastPing >= 100 ? Color.White : Color.Black;
+        var lastPingBackColor = lastPing >= 175 ? GlobalShared.OfflineColor : lastPing >= 100 ? GlobalShared.DegradedColor : Color.White;
+
+        c_LastPingValueLabel.Text         = $"{lastPing}ms";
+        c_AveragePingValueLabel.Text      = $"{avgPing}ms";
+        c_NetworkTypeValueLabel.Text      = _network.UsingEthernet() ? "Ethernet" : "Wi-Fi";
+        c_LastPingValueLabel.ForeColor    = lastPingLabelForeColor;
+        c_AveragePingValueLabel.ForeColor = avgPingLabelForeColor;
+
+        var uri         = new Uri(e.Url);
+        var logListItem = new ListViewItem($"{uri.Scheme}://{uri.Host}")
         {
-            HandleCreated -= OnHandleCreated;
+            UseItemStyleForSubItems = false
+        };
+        
+        logListItem.SubItems.Add(c_LastPingValueLabel.Text);
+        logListItem.SubItems[1].ForeColor = lastPingForeColor;
+        logListItem.SubItems[1].BackColor = lastPingBackColor;
+
+        c_ProbeLogListView.Items.Add(logListItem);
+
+        if (c_ProbeLogListView.Items.Count > 50)
+        {
+            c_ProbeLogListView.Items.RemoveAt(0);
         }
+
+        c_ProbeLogListView.Columns[0].Width = -2;
+        c_ProbeLogListView.Columns[1].Width = -1;
+        c_ProbeLogListView.Items[^1].EnsureVisible();
     }
     #endregion
 }

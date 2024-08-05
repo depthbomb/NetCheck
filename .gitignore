@@ -400,5 +400,4 @@ FodyWeavers.xsd
 .idea/
 
 dist/
-NetCheck.Worker/static/
 publish/

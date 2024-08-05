@@ -1,6 +1,0 @@
-﻿<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Publish NetCheck.Worker" type="DotNetFolderPublish" factoryName="Publish to folder">
-    <riderPublish configuration="Release" platform="Any CPU" produce_single_file="true" ready_to_run="true" runtime="win-x64" target_folder="$PROJECT_DIR$/publish" target_framework="net8.0" uuid_high="9209932251435454321" uuid_low="-8046365999771945953" />
-    <method v="2" />
-  </configuration>
-</component>
