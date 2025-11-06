@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+	<qresource>
+		<file>icons/icon.ico</file>
+		<file>icons/icon-degraded.ico</file>
+		<file>icons/icon-offline.ico</file>
+		<file>icons/icon-online.ico</file>
+	</qresource>
+</RCC>

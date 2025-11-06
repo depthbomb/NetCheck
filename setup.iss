@@ -1,9 +1,9 @@
 #define MyAppName "NetCheck"
 #define MyAppDescription "A simple internet connectivity monitoring application"
-#define MyAppVersion "3.0.0.0"
+#define MyAppVersion "5.0.1.0"
 #define MyAppPublisher "Caprine Logic"
 #define MyAppExeName "netcheck.exe"
-#define MyAppCopyright "Copyright (C) 2024 Caprine Logic"
+#define MyAppCopyright "Copyright (C) 2020-2025 Caprine Logic"
 
 [Setup]
 AppId={{516638A0-35EC-49B9-A711-2CED2C25A8C7}
@@ -19,14 +19,14 @@ DisableDirPage=yes
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 AllowNoIcons=yes
-OutputDir=.\dist
+OutputDir=.\bin
 OutputBaseFilename=netcheck_setup
-SetupIconFile=.\NetCheck\Resources\Icons\Icon.ico
+SetupIconFile=.\resources\icons\icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
 WizardStyle=modern
 WizardResizable=no
-ArchitecturesAllowed=x64
+ArchitecturesAllowed=x64compatible
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 ShowTasksTreeLines=True
@@ -57,8 +57,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: startup; Description: "Run on Startup"
 
 [Files]
-Source: ".\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\publish\netcheck.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\bin\MinSizeRel\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
